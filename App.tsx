@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import LoadingPage from './screens/LoadingPage';
+import RootNavigation from './RootNavigation';
 
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
-      <LoadingPage />
+      <RootNavigation />
     </View>
   );
 }
