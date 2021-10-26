@@ -10,8 +10,13 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFonts, Rancho_400Regular } from '@expo-google-fonts/rancho';
 import AppLoading from 'expo-app-loading';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-const LoadingPage = () => {
+interface Props {
+  navigation: NavigationProp<ParamListBase>;
+}
+
+const LoadingPage: React.FC<Props> = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     Rancho_400Regular,
   });
@@ -31,7 +36,10 @@ const LoadingPage = () => {
               <Text style={styles.logoText}>Map</Text>
             </View>
             <StatusBar style="light" />
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('HomePage')}
+              style={styles.button}
+            >
               <Text style={styles.buttonText}>Explore</Text>
               <Icon
                 style={{ marginLeft: 5 }}
