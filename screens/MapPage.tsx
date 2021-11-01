@@ -11,7 +11,7 @@ const MapPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header setFiltersModalVisible={setFiltersModalVisible} />
+      <Header setFiltersModalVisible={setFiltersModalVisible} showFilters />
       <Map setInfoModalVisible={setInfoModalVisible} />
       <InfoModal
         infoModalVisible={infoModalVisible}
