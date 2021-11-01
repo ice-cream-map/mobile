@@ -4,13 +4,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 export interface Props {
   setFiltersModalVisible: Dispatch<SetStateAction<boolean>>;
+  showFilters?: boolean;
 }
 
-const Header: React.FC<Props> = ({ setFiltersModalVisible }) => {
+const Header: React.FC<Props> = ({ setFiltersModalVisible, showFilters }) => {
   return (
     <View
       style={{
-        height: 47,
+        height: 50,
         backgroundColor: 'white',
         justifyContent: 'center',
       }}
@@ -29,10 +30,19 @@ const Header: React.FC<Props> = ({ setFiltersModalVisible }) => {
           <Icon name="arrow-back-outline" size={25} />
           <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Back</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 15 }}>COCONUT PRINCESS</Text>
-        <TouchableOpacity onPress={() => setFiltersModalVisible(true)}>
-          <Icon name="filter" size={25} />
-        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 15,
+            marginRight: showFilters ? 0 : '25%',
+          }}
+        >
+          COCONUT PRINCESS
+        </Text>
+        {showFilters && (
+          <TouchableOpacity onPress={() => setFiltersModalVisible(true)}>
+            <Icon name="filter" size={25} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
