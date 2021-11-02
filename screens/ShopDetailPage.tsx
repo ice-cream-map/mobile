@@ -10,6 +10,7 @@ import Header from '../components/header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ShopDetail from '../components/shopDetail';
 import Rating from '../components/rating';
+import { useTheme } from '../contexts/ThemeContext';
 
 const dummyData = [
   {
@@ -45,8 +46,12 @@ const dummyData = [
 ];
 
 const ShopDetailPage = () => {
+  const { colors } = useTheme();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: colors.background }}
+    >
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
         <ShopDetail />
@@ -73,7 +78,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    backgroundColor: '#eee',
   },
 });
 

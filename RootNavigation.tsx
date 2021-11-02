@@ -16,10 +16,10 @@ const RootNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptions}>
-        <Stack.Screen name="ShopDetailPage" component={ShopDetailPage} />
-        <Stack.Screen name="MapPage" component={MapPage} />
         <Stack.Screen name="LoadingPage" component={LoadingPage} />
         <Stack.Screen name="HomePage" component={HomePage} />
+        <Stack.Screen name="ShopDetailPage" component={ShopDetailPage} />
+        <Stack.Screen name="MapPage" component={MapPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

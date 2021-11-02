@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface Props {
   flavor: string;
@@ -17,8 +18,12 @@ const SuggestionItem: React.FC<Props> = ({
   likes,
   dislikes,
 }) => {
+  const { colors } = useTheme();
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={{ ...styles.container, backgroundColor: colors.primary }}
+    >
       <View style={styles.infoContainer}>
         <View style={styles.infoContainerItem}>
           <Icon
@@ -27,7 +32,7 @@ const SuggestionItem: React.FC<Props> = ({
             size={15}
             color="#1EB3F2"
           />
-          <Text>{flavor}</Text>
+          <Text style={{ color: colors.text }}>{flavor}</Text>
         </View>
         <View style={styles.infoContainerItem}>
           <Icon
@@ -36,7 +41,7 @@ const SuggestionItem: React.FC<Props> = ({
             size={15}
             color="#1EB3F2"
           />
-          <Text>{address}</Text>
+          <Text style={{ color: colors.text }}>{address}</Text>
         </View>
         <View style={styles.infoContainerItem}>
           <Icon
@@ -45,11 +50,13 @@ const SuggestionItem: React.FC<Props> = ({
             size={15}
             color="#1EB3F2"
           />
-          <Text>{tags.join(' • ')}</Text>
+          <Text style={{ color: colors.text }}>{tags.join(' • ')}</Text>
         </View>
       </View>
       <View style={styles.thumbsContainer}>
-        <View style={styles.thumbWrapper}>
+        <View
+          style={{ ...styles.thumbWrapper, backgroundColor: colors.background }}
+        >
           <Icon
             style={{ marginRight: 5 }}
             name="thumbs-up"
@@ -58,7 +65,9 @@ const SuggestionItem: React.FC<Props> = ({
           />
           <Text>{likes}</Text>
         </View>
-        <View style={styles.thumbWrapper}>
+        <View
+          style={{ ...styles.thumbWrapper, backgroundColor: colors.background }}
+        >
           <Icon
             style={{ marginRight: 5 }}
             name="thumbs-down"
@@ -101,7 +110,6 @@ const styles = StyleSheet.create({
   },
   thumbWrapper: {
     flexDirection: 'row',
-    backgroundColor: '#eee',
     borderRadius: 10,
     padding: 12,
     alignItems: 'center',

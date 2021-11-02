@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface Props {
   name: string;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -25,7 +28,7 @@ const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: 'white',
+          backgroundColor: colors.background,
           width: 75,
           height: 35,
           borderRadius: 10,
@@ -40,11 +43,11 @@ const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
           size={25}
           color="#21B049"
         />
-        <Text>{likes}</Text>
+        <Text style={{ color: colors.text }}>{likes}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={{
-          backgroundColor: 'white',
+          backgroundColor: colors.background,
           width: 75,
           height: 35,
           borderRadius: 10,
@@ -59,7 +62,7 @@ const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
           size={25}
           color="#EE3636"
         />
-        <Text>{dislikes}</Text>
+        <Text style={{ color: colors.text }}>{dislikes}</Text>
       </TouchableOpacity>
     </View>
   );

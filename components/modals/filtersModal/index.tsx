@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { Input } from 'react-native-elements';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface Props {
   filtersModalVisible: boolean;
@@ -18,6 +19,8 @@ const FiltersModal: React.FC<Props> = ({
   filtersModalVisible,
   setFiltersModalVisible,
 }) => {
+  const { colors } = useTheme();
+
   return (
     <Modal
       animationType="slide"
@@ -35,21 +38,24 @@ const FiltersModal: React.FC<Props> = ({
         }}
       >
         <TouchableWithoutFeedback>
-          <View style={styles.container}>
+          <View
+            style={{ ...styles.container, backgroundColor: colors.primary }}
+          >
             <Text
               style={{
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
                 marginLeft: 30,
+                color: colors.text,
               }}
             >
               filters:
             </Text>
             <View style={styles.inputWrapper}>
-              <Text>City:</Text>
+              <Text style={{ color: colors.text }}>City:</Text>
               <Input
                 containerStyle={{
-                  backgroundColor: '#EEEEEE',
+                  backgroundColor: colors.background,
                   borderRadius: 15,
                   height: 35,
                   width: 195,
@@ -58,7 +64,7 @@ const FiltersModal: React.FC<Props> = ({
                 inputContainerStyle={{
                   borderBottomWidth: 0,
                 }}
-                inputStyle={{ fontSize: 14 }}
+                inputStyle={{ fontSize: 14, color: colors.text }}
               />
             </View>
             <View style={styles.buttonWrapper}>
@@ -78,7 +84,6 @@ const FiltersModal: React.FC<Props> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     width: 270,
     height: 180,
     justifyContent: 'center',
