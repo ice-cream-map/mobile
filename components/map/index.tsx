@@ -2,6 +2,8 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../contexts/ThemeContext';
+import { darkMapStyle } from '../../utils/mapStyle';
 
 const dummyData = [
   {
@@ -29,6 +31,8 @@ interface Props {
 }
 
 const Map: React.FC<Props> = ({ setInfoModalVisible }) => {
+  const { isDark } = useTheme();
+
   return (
     <View>
       <MapView
@@ -39,6 +43,7 @@ const Map: React.FC<Props> = ({ setInfoModalVisible }) => {
           latitudeDelta: 0.1,
           longitudeDelta: 0.1,
         }}
+        customMapStyle={isDark ? darkMapStyle : []}
       >
         {dummyData.map((marker) => (
           <Marker

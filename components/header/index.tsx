@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export interface Props {
   setFiltersModalVisible: Dispatch<SetStateAction<boolean>>;
@@ -8,11 +9,13 @@ export interface Props {
 }
 
 const Header: React.FC<Props> = ({ setFiltersModalVisible, showFilters }) => {
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
         height: 50,
-        backgroundColor: 'white',
+        backgroundColor: colors.primary,
         justifyContent: 'center',
       }}
     >
@@ -27,20 +30,25 @@ const Header: React.FC<Props> = ({ setFiltersModalVisible, showFilters }) => {
         <TouchableOpacity
           style={{ flexDirection: 'row', alignItems: 'center' }}
         >
-          <Icon name="arrow-back-outline" size={25} />
-          <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Back</Text>
+          <Icon name="arrow-back-outline" size={25} color={colors.text} />
+          <Text
+            style={{ fontWeight: 'bold', fontSize: 17, color: colors.text }}
+          >
+            Back
+          </Text>
         </TouchableOpacity>
         <Text
           style={{
             fontSize: 15,
             marginRight: showFilters ? 0 : '25%',
+            color: colors.text,
           }}
         >
           COCONUT PRINCESS
         </Text>
         {showFilters && (
           <TouchableOpacity onPress={() => setFiltersModalVisible(true)}>
-            <Icon name="filter" size={25} />
+            <Icon color={colors.text} name="filter" size={25} />
           </TouchableOpacity>
         )}
       </View>
