@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoadingPage from './screens/LoadingPage';
-import HomePage from './screens/HomePage';
-import MapPage from './screens/MapPage';
-import ShopDetailPage from './screens/ShopDetailPage';
+import LoadingScreen from './screens/LoadingScreen';
+import HomeScreen from './screens/HomeScreen';
+import MapScreen from './screens/MapScreen';
+import ShopDetailScreen from './screens/ShopDetailScreen';
 
 const RootNavigation = () => {
   const Stack = createNativeStackNavigator();
@@ -16,10 +16,10 @@ const RootNavigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptions}>
-        <Stack.Screen name="LoadingPage" component={LoadingPage} />
-        <Stack.Screen name="HomePage" component={HomePage} />
-        <Stack.Screen name="ShopDetailPage" component={ShopDetailPage} />
-        <Stack.Screen name="MapPage" component={MapPage} />
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="ShopDetailScreen" component={ShopDetailScreen} />
+        <Stack.Screen name="MapScreen" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

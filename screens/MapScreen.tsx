@@ -4,14 +4,23 @@ import Header from '../components/header';
 import Map from '../components/map';
 import FiltersModal from '../components/modals/filtersModal';
 import InfoModal from '../components/modals/infoModal';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-const MapPage = () => {
+interface IMapScreen {
+  navigation: NavigationProp<ParamListBase>;
+}
+
+const MapScreen: React.FC<IMapScreen> = ({ navigation }) => {
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [filtersModalVisible, setFiltersModalVisible] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header setFiltersModalVisible={setFiltersModalVisible} showFilters />
+      <Header
+        navigation={navigation}
+        setFiltersModalVisible={setFiltersModalVisible}
+        showFilters
+      />
       <Map setInfoModalVisible={setInfoModalVisible} />
       <InfoModal
         infoModalVisible={infoModalVisible}
@@ -33,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapPage;
+export default MapScreen;

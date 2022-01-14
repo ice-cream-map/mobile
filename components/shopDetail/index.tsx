@@ -1,10 +1,18 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
+import { IShop } from '../../screens/ShopDetailScreen';
+import IceCreamItem from '../iceCreamItem';
 
-const ShopDetail = () => {
+interface IShopDetail {
+  shop: IShop | null;
+}
+
+const ShopDetail: React.FC<IShopDetail> = ({ shop }) => {
   const { colors } = useTheme();
+
+  const { address } = shop || {};
 
   return (
     <View
@@ -25,77 +33,25 @@ const ShopDetail = () => {
         <Icon name="location" size={15} color="#0A9FDF" />
         <Text style={{ color: colors.text }}>Address:</Text>
         <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          Plac Bema 3
+          {`${address?.city.concat(' • ')} ${address?.street} ${
+            address?.apartment
+          }`}
         </Text>
       </View>
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
           marginBottom: 10,
         }}
       >
         <Icon name="ice-cream" size={15} color="#0A9FDF" />
-        <Text style={{ color: colors.text }}>Flavors:</Text>
+        <Text style={{ color: colors.text }}>Ice creams and flavours:</Text>
       </View>
-      <View
-        style={{
-          marginLeft: 100,
-        }}
-      >
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Śmietanka
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Czekolada
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Sorbet: Truskawka
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Princessa kokosowa
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Kinder Country{' '}
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 10,
-        }}
-      >
-        <Icon name="time" size={15} color="#0A9FDF" />
-        <Text style={{ color: colors.text }}>Opening hours:</Text>
-      </View>
-      <View
-        style={{
-          marginLeft: 100,
-        }}
-      >
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Sunday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Monday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Tuesday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Wednesday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Thursday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Friday: 11:00 - 21:00
-        </Text>
-        <Text style={{ marginHorizontal: 5, color: colors.text }}>
-          • Saturday: 11:00 - 21:00
-        </Text>
-      </View>
+      <FlatList
+        data={shop?.iceCreams}
+        renderItem={({ item }) => <IceCreamItem iceCreams={item} />}
+        keyExtractor={(item) => item.id.toString()}
+      />
     </View>
   );
 };

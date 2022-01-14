@@ -2,26 +2,31 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-interface Props {
-  flavor: string;
-  address: string;
-  tags: Array<string>;
-  likes: number;
-  dislikes: number;
+interface ISuggestionItem {
+  id: number;
+  address: {
+    apartment: string;
+    city: string;
+    street: string;
+    zipcode: string;
+  };
+  name: string;
+  navigation: NavigationProp<ParamListBase>;
 }
 
-const SuggestionItem: React.FC<Props> = ({
-  flavor,
+const SuggestionItem: React.FC<ISuggestionItem> = ({
+  name,
   address,
-  tags,
-  likes,
-  dislikes,
+  navigation,
+  id,
 }) => {
   const { colors } = useTheme();
 
   return (
     <TouchableOpacity
+      onPress={() => navigation.navigate('ShopDetailScreen', { id })}
       style={{ ...styles.container, backgroundColor: colors.primary }}
     >
       <View style={styles.infoContainer}>
@@ -32,7 +37,7 @@ const SuggestionItem: React.FC<Props> = ({
             size={15}
             color="#1EB3F2"
           />
-          <Text style={{ color: colors.text }}>{flavor}</Text>
+          <Text style={{ color: colors.text }}>{name}</Text>
         </View>
         <View style={styles.infoContainerItem}>
           <Icon
@@ -41,40 +46,9 @@ const SuggestionItem: React.FC<Props> = ({
             size={15}
             color="#1EB3F2"
           />
-          <Text style={{ color: colors.text }}>{address}</Text>
-        </View>
-        <View style={styles.infoContainerItem}>
-          <Icon
-            style={{ marginHorizontal: 5 }}
-            name="bookmark"
-            size={15}
-            color="#1EB3F2"
-          />
-          <Text style={{ color: colors.text }}>{tags.join(' • ')}</Text>
-        </View>
-      </View>
-      <View style={styles.thumbsContainer}>
-        <View
-          style={{ ...styles.thumbWrapper, backgroundColor: colors.background }}
-        >
-          <Icon
-            style={{ marginRight: 5 }}
-            name="thumbs-up"
-            size={15}
-            color="#1EB3F2"
-          />
-          <Text>{likes}</Text>
-        </View>
-        <View
-          style={{ ...styles.thumbWrapper, backgroundColor: colors.background }}
-        >
-          <Icon
-            style={{ marginRight: 5 }}
-            name="thumbs-down"
-            size={15}
-            color="#1EB3F2"
-          />
-          <Text>{dislikes}</Text>
+          <Text style={{ color: colors.text }}>{`${address.city.concat(
+            ' • ',
+          )} ${address.street.concat(' • ')} ${address.apartment}`}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -87,7 +61,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     borderTopRightRadius: 20,
     width: '95%',
-    height: 120,
+    height: 90,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -99,19 +73,6 @@ const styles = StyleSheet.create({
   },
   infoContainerItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-  thumbsContainer: {
-    height: '100%',
-    flexDirection: 'column',
-    width: 71,
-    marginRight: 20,
-    justifyContent: 'space-evenly',
-  },
-  thumbWrapper: {
-    flexDirection: 'row',
-    borderRadius: 10,
-    padding: 12,
     alignItems: 'center',
   },
 });

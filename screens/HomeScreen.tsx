@@ -1,59 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StatusBar,
   SafeAreaView,
   StyleSheet,
   Platform,
   Text,
-  ScrollView,
   View,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SuggestionItem from '../components/suggestionItem';
 import { SearchBarBaseProps } from 'react-native-elements/dist/searchbar/SearchBar';
 import { useTheme } from '../contexts/ThemeContext';
+import axios from 'axios';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 const SafeSearchBar = SearchBar as unknown as React.FC<SearchBarBaseProps>;
 
-const dummyData = [
-  {
-    flavor: 'coconut princess',
-    address: 'warszawa, plac bema 3',
-    tags: ['sorbet', 'wege'],
-    likes: 321,
-    dislikes: 11,
-    id: 1,
-  },
-  {
-    flavor: 'coconut princess',
-    address: 'warszawa, plac bema 3',
-    tags: ['sorbet', 'wege'],
-    likes: 321,
-    dislikes: 11,
-    id: 2,
-  },
-  {
-    flavor: 'coconut princess',
-    address: 'warszawa, plac bema 3',
-    tags: ['sorbet', 'wege'],
-    likes: 321,
-    dislikes: 11,
-    id: 3,
-  },
-  {
-    flavor: 'coconut princess',
-    address: 'warszawa, plac bema 3',
-    tags: ['sorbet', 'wege'],
-    likes: 321,
-    dislikes: 11,
-    id: 4,
-  },
-];
+interface IShops {
+  id: number;
+  memberAddress: {
+    apartment: string;
+    city: string;
+    street: string;
+    zipcode: string;
+  };
+  name: string;
+  photoUrl: null | string;
+  url: string;
+}
 
-const HomePage = () => {
+interface IHomeScreen {
+  navigation: NavigationProp<ParamListBase>;
+}
+const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
   const { setScheme, isDark, colors } = useTheme();
+  const [shops, setShops] = useState<Array<IShops>>([]);
+
+  const getShops = async () => {
+    try {
+      const resp = await axios.get('http://10.0.2.2:8080/api/v1/shops');
+      const data = resp.data;
+      if (data) {
+        setShops(data);
+      }
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  };
+
+  useEffect(() => {
+    getShops();
+  }, []);
+
   return (
     <SafeAreaView
       style={{ ...styles.container, backgroundColor: colors.background }}
@@ -94,7 +95,7 @@ const HomePage = () => {
             color: colors.text,
           }}
         >
-          Suggestions
+          Lattest Added
         </Text>
         <TouchableOpacity
           onPress={() => (isDark ? setScheme('light') : setScheme('dark'))}
@@ -107,24 +108,26 @@ const HomePage = () => {
           />
         </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {dummyData.map((item) => (
-          <SuggestionItem
-            key={item.id}
-            flavor={item.flavor}
-            address={item.address}
-            likes={item.likes}
-            dislikes={item.dislikes}
-            tags={item.tags}
-          />
-        ))}
+      <View>
+        <FlatList
+          data={shops}
+          renderItem={({ item }) => (
+            <SuggestionItem
+              address={item.memberAddress}
+              name={item.name}
+              id={item.id}
+              navigation={navigation}
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
         <Icon
           style={{ alignSelf: 'center' }}
           name="ice-cream"
           size={160}
           color="#B2B2B2"
         />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -136,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomePage;
+export default HomeScreen;

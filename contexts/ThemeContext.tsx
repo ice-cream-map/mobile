@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useColorScheme } from 'react-native-appearance';
 import { lightColors, darkColors, Colors } from '../Theme/colorThemes';
 
-interface Props {
+interface IContext {
   isDark: boolean;
   colors: Colors;
-  setScheme: (val: 'dark' | 'light') => void;
+  setScheme: (value: 'dark' | 'light') => void;
 }
 
-export const ThemeContext = React.createContext<Props>({
+export const ThemeContext = createContext<IContext>({
   isDark: false,
   colors: lightColors,
   setScheme: () => null,
@@ -36,4 +36,4 @@ export const ThemeProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useTheme = () => React.useContext(ThemeContext);
+export const useTheme = () => useContext(ThemeContext);
