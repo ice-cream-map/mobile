@@ -12,11 +12,11 @@ import { useFonts, Rancho_400Regular } from '@expo-google-fonts/rancho';
 import AppLoading from 'expo-app-loading';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-interface Props {
+interface ILoadingScreen {
   navigation: NavigationProp<ParamListBase>;
 }
 
-const LoadingPage: React.FC<Props> = ({ navigation }) => {
+const LoadingScreen: React.FC<ILoadingScreen> = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     Rancho_400Regular,
   });
@@ -37,7 +37,7 @@ const LoadingPage: React.FC<Props> = ({ navigation }) => {
             </View>
             <StatusBar style="light" />
             <TouchableOpacity
-              onPress={() => navigation.navigate('HomePage')}
+              onPress={() => navigation.navigate('HomeScreen')}
               style={styles.button}
             >
               <Text style={styles.buttonText}>Explore</Text>
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingPage;
+export default LoadingScreen;

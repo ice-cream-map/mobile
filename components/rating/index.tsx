@@ -3,13 +3,14 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
 
-interface Props {
+interface IRating {
   name: string;
-  likes: number;
-  dislikes: number;
+  positiveVotes: number;
+  votes: number;
+  id: number;
 }
 
-const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
+const Rating: React.FC<IRating> = ({ name, votes, positiveVotes, id }) => {
   const { colors } = useTheme();
 
   return (
@@ -43,7 +44,7 @@ const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
           size={25}
           color="#21B049"
         />
-        <Text style={{ color: colors.text }}>{likes}</Text>
+        <Text style={{ color: colors.text }}>{positiveVotes}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={{
@@ -62,7 +63,7 @@ const Rating: React.FC<Props> = ({ name, likes, dislikes }) => {
           size={25}
           color="#EE3636"
         />
-        <Text style={{ color: colors.text }}>{dislikes}</Text>
+        <Text style={{ color: colors.text }}>{votes - positiveVotes}</Text>
       </TouchableOpacity>
     </View>
   );
