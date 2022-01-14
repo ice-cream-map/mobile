@@ -14,6 +14,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { RouteProp } from '@react-navigation/native';
 import axios from 'axios';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import FlashMessage from 'react-native-flash-message';
 
 export interface IShop {
   id: number;
@@ -51,28 +52,33 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
   const { colors } = useTheme();
   const { id } = route.params;
   const [shop, setShop] = useState<IShop | null>(null);
-
-  const getShop = async () => {
-    try {
-      const resp = await axios.get(`http://10.0.2.2:8080/api/v1/shops/${id}`);
-      const data = resp.data;
-      if (data) {
-        setShop(data);
-      }
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  };
+  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
+    const getShop = async () => {
+      try {
+        const resp = await axios.get(`http://10.0.2.2:8080/api/v1/shops/${id}`);
+        const data = resp.data;
+        if (data) {
+          setShop(data);
+        }
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    };
     getShop();
-  }, []);
+  }, [isUpdate]);
 
   return (
     <SafeAreaView
       style={{ ...styles.container, backgroundColor: colors.background }}
     >
       <Header navigation={navigation} />
+      <FlashMessage
+        statusBarHeight={40}
+        position="bottom"
+        style={{ alignItems: 'center' }}
+      />
       <FlatList
         ListHeaderComponent={<ShopDetail shop={shop} />}
         data={shop?.iceCreams}
@@ -82,6 +88,8 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
             votes={item.votes}
             positiveVotes={item.positiveVotes}
             id={item.id}
+            setIsUpdate={setIsUpdate}
+            isUpdate={isUpdate}
           />
         )}
         keyExtractor={(item) => item.id.toString()}
