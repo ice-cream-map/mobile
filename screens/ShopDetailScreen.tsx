@@ -5,6 +5,7 @@ import {
   Platform,
   StatusBar,
   FlatList,
+  Image,
 } from 'react-native';
 import Header from '../components/header';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -26,6 +27,8 @@ export interface IShop {
     zipcode: string;
     street: string;
     apartment: string;
+    latitude: string;
+    longitude: string;
   };
   iceCreams: Array<IiceCreams>;
 }
@@ -66,6 +69,7 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
         return Promise.reject(err);
       }
     };
+
     getShop();
   }, [isUpdate]);
 
@@ -80,7 +84,15 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
         style={{ alignItems: 'center' }}
       />
       <FlatList
-        ListHeaderComponent={<ShopDetail shop={shop} />}
+        ListHeaderComponent={
+          <>
+            <Image
+              style={{ width: '100%', height: 150 }}
+              source={{ uri: shop?.photoUrl }}
+            />
+            <ShopDetail shop={shop} />
+          </>
+        }
         data={shop?.iceCreams}
         renderItem={({ item }) => (
           <Rating
@@ -90,6 +102,7 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
             id={item.id}
             setIsUpdate={setIsUpdate}
             isUpdate={isUpdate}
+            voted={item.voted}
           />
         )}
         keyExtractor={(item) => item.id.toString()}

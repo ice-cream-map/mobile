@@ -34,10 +34,17 @@ interface IShops {
 
 interface IHomeScreen {
   navigation: NavigationProp<ParamListBase>;
+  searchState: string;
 }
+
 const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
   const { setScheme, isDark, colors } = useTheme();
   const [shops, setShops] = useState<Array<IShops>>([]);
+  const [search, setSearch] = useState('');
+
+  const updateSearch = (search: string) => {
+    setSearch(search);
+  };
 
   const getShops = async () => {
     try {
@@ -61,8 +68,9 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
     >
       <StatusBar barStyle="dark-content" />
       <SafeSearchBar
-        platform="ios"
-        placeholder="Find your flavor"
+        onSubmitEditing={() => navigation.navigate('MapScreen', { search })}
+        platform="default"
+        placeholder="Find your ice cream"
         searchIcon={
           <Icon
             style={{ marginLeft: 5 }}
@@ -71,12 +79,22 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
             color="#1EB3F2"
           />
         }
-        containerStyle={{ height: 100, backgroundColor: colors.primary }}
+        containerStyle={{
+          height: 100,
+          backgroundColor: colors.primary,
+          justifyContent: 'center',
+          borderBottomColor: 'transparent',
+          borderTopColor: 'transparent',
+        }}
         inputContainerStyle={{
           borderRadius: 30,
+          width: '90%',
           backgroundColor: colors.background,
+          alignSelf: 'center',
         }}
         placeholderTextColor={colors.text}
+        onChangeText={updateSearch}
+        value={search}
       />
       <View
         style={{

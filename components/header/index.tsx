@@ -1,20 +1,14 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 export interface IHeader {
-  setFiltersModalVisible?: Dispatch<SetStateAction<boolean>>;
-  showFilters?: boolean;
   navigation: NavigationProp<ParamListBase>;
 }
 
-const Header: React.FC<IHeader> = ({
-  setFiltersModalVisible,
-  showFilters,
-  navigation,
-}) => {
+const Header: React.FC<IHeader> = ({ navigation }) => {
   const { colors } = useTheme();
 
   return (
@@ -28,14 +22,19 @@ const Header: React.FC<IHeader> = ({
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
           alignItems: 'center',
           marginHorizontal: 10,
+          justifyContent: 'center',
         }}
       >
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{ flexDirection: 'row', alignItems: 'center' }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            position: 'absolute',
+            left: 0,
+          }}
         >
           <Icon name="arrow-back-outline" size={25} color={colors.text} />
           <Text
@@ -47,17 +46,11 @@ const Header: React.FC<IHeader> = ({
         <Text
           style={{
             fontSize: 15,
-            marginRight: showFilters ? 0 : '25%',
             color: colors.text,
           }}
         >
           COCONUT PRINCESS
         </Text>
-        {showFilters && (
-          <TouchableOpacity onPress={() => setFiltersModalVisible?.(true)}>
-            <Icon color={colors.text} name="filter" size={25} />
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );
