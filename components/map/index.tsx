@@ -1,80 +1,95 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
 import { darkMapStyle } from '../../utils/mapStyle';
+import { IShops } from '../../screens/MapScreen';
+import axios from 'axios';
+import { GOOGLE_API_KEY } from '@env';
 
-const dummyData = [
-  {
-    id: 1,
-    latitude: 51.206337,
-    longitude: 16.163505,
-    name: 'Polish Lody',
-  },
-  {
-    id: 2,
-    latitude: 51.203345679383496,
-    longitude: 16.193997114407324,
-    name: 'Nowe Horyzonty',
-  },
-  {
-    id: 3,
-    latitude: 51.20231942807269,
-    longitude: 16.14285542532718,
-    name: 'Super Lodziarnia',
-  },
-];
-
-interface Props {
+interface IMap {
   setInfoModalVisible: Dispatch<SetStateAction<boolean>>;
+  shops: Array<IShops>;
+  setId: (arg1: number) => void;
+  search: string;
 }
 
-const Map: React.FC<Props> = ({ setInfoModalVisible }) => {
+interface ICoordinate {
+  lat: number;
+  lng: number;
+}
+
+const Map: React.FC<IMap> = ({ setInfoModalVisible, shops, setId, search }) => {
   const { isDark } = useTheme();
+  const [coordinate, setCoordinate] = useState<ICoordinate>();
+
+  useEffect(() => {
+    if (search) {
+      const getCoordinate = async () => {
+        try {
+          const res = await axios.get(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${search}&key=${GOOGLE_API_KEY}`,
+          );
+          const data = res.data;
+          if (data) {
+            setCoordinate(data.results[0].geometry.location);
+          }
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      };
+      getCoordinate();
+    }
+  }, []);
 
   return (
     <View>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 51.206337,
-          longitude: 16.163505,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
-        }}
-        customMapStyle={isDark ? darkMapStyle : []}
-      >
-        {dummyData.map((marker) => (
-          <Marker
-            key={marker.id}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-            pinColor="#0A9FDF"
-            onPress={() => setInfoModalVisible(true)}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                alignContent: 'center',
-                alignItems: 'center',
+      {coordinate && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: coordinate?.lat,
+            longitude: coordinate?.lng,
+            latitudeDelta: 0.3,
+            longitudeDelta: 0.9,
+          }}
+          customMapStyle={isDark ? darkMapStyle : []}
+        >
+          {shops?.map((marker) => (
+            <Marker
+              key={marker.id}
+              coordinate={{
+                latitude: parseFloat(marker.memberAddress.latitude),
+                longitude: parseFloat(marker.memberAddress.longitude),
+              }}
+              pinColor="#0A9FDF"
+              onPress={() => {
+                setInfoModalVisible(true);
+                setId(marker.id);
               }}
             >
-              <Icon
-                style={{ marginLeft: 5 }}
-                name="ice-cream"
-                size={30}
-                color="#1EB3F2"
-              />
-              <Text style={{ color: '#0A9FDF', fontWeight: 'bold' }}>
-                {marker.name}
-              </Text>
-            </View>
-          </Marker>
-        ))}
-      </MapView>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Icon
+                  style={{ marginLeft: 5 }}
+                  name="ice-cream"
+                  size={30}
+                  color="#1EB3F2"
+                />
+                <Text style={{ color: '#0A9FDF', fontWeight: 'bold' }}>
+                  {marker.name}
+                </Text>
+              </View>
+            </Marker>
+          ))}
+        </MapView>
+      )}
     </View>
   );
 };

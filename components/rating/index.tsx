@@ -12,6 +12,7 @@ interface IRating {
   id: number;
   setIsUpdate: (arg: boolean) => void;
   isUpdate: boolean;
+  voted: string | null;
 }
 
 type ServerError = { errors: string };
@@ -23,6 +24,7 @@ const Rating: React.FC<IRating> = ({
   id,
   isUpdate,
   setIsUpdate,
+  voted,
 }) => {
   const { colors } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +52,7 @@ const Rating: React.FC<IRating> = ({
       if (error.response) {
         setIsLoading(false);
         showMessage({
-          message: error.response.data.errors,
+          message: error.response.data.errors[0],
           type: 'warning',
         });
       }
@@ -91,7 +93,11 @@ const Rating: React.FC<IRating> = ({
             <>
               <Icon
                 style={{ marginRight: 5 }}
-                name="thumbs-up-outline"
+                name={
+                  voted == null || voted == 'down'
+                    ? 'thumbs-up-outline'
+                    : 'thumbs-up'
+                }
                 size={25}
                 color="#21B049"
               />
@@ -117,7 +123,11 @@ const Rating: React.FC<IRating> = ({
             <>
               <Icon
                 style={{ marginRight: 5 }}
-                name="thumbs-down-outline"
+                name={
+                  voted == null || voted == 'up'
+                    ? 'thumbs-down-outline'
+                    : 'thumbs-down'
+                }
                 size={25}
                 color="#EE3636"
               />

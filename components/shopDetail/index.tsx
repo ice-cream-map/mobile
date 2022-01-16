@@ -19,7 +19,6 @@ const ShopDetail: React.FC<IShopDetail> = ({ shop }) => {
       style={{
         backgroundColor: colors.primary,
         minHeight: 350,
-        marginTop: 50,
         padding: 10,
       }}
     >
