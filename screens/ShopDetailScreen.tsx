@@ -16,6 +16,7 @@ import { RouteProp } from '@react-navigation/native';
 import axios from 'axios';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import FlashMessage from 'react-native-flash-message';
+import { API_URL_SHOP } from '../utils/api';
 
 export interface IShop {
   id: number;
@@ -60,7 +61,7 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
   useEffect(() => {
     const getShop = async () => {
       try {
-        const resp = await axios.get(`http://10.0.2.2:8080/api/v1/shops/${id}`);
+        const resp = await axios.get(`${API_URL_SHOP}${id}`);
         const data = resp.data;
         if (data) {
           setShop(data);
