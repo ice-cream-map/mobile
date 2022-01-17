@@ -8,6 +8,7 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -42,6 +43,7 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
   const { setScheme, isDark, colors } = useTheme();
   const [shops, setShops] = useState<Array<IShops>>([]);
   const [search, setSearch] = useState('');
+  const [isLoading, setisLoading] = useState(false);
 
   const updateSearch = (search: string) => {
     setSearch(search);
@@ -49,12 +51,15 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
 
   const getShops = async () => {
     try {
+      setisLoading(true);
       const resp = await axios.get(`${API_URL_SHOPS}`);
       const data = resp.data;
       if (data) {
+        setisLoading(false);
         setShops(data);
       }
     } catch (err) {
+      setisLoading(true);
       return Promise.reject(err);
     }
   };
@@ -128,18 +133,22 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View>
-        <FlatList
-          data={shops}
-          renderItem={({ item }) => (
-            <SuggestionItem
-              address={item.memberAddress}
-              name={item.name}
-              id={item.id}
-              navigation={navigation}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#1EB3F2" />
+        ) : (
+          <FlatList
+            data={shops}
+            renderItem={({ item }) => (
+              <SuggestionItem
+                address={item.memberAddress}
+                name={item.name}
+                id={item.id}
+                navigation={navigation}
+              />
+            )}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        )}
         <Icon
           style={{ alignSelf: 'center' }}
           name="ice-cream"

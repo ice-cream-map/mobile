@@ -6,6 +6,7 @@ import {
   StatusBar,
   FlatList,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../components/header';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -57,16 +58,20 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
   const { id } = route.params;
   const [shop, setShop] = useState<IShop | null>(null);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     const getShop = async () => {
       try {
+        setisLoading(true);
         const resp = await axios.get(`${API_URL_SHOP}${id}`);
         const data = resp.data;
         if (data) {
+          setisLoading(false);
           setShop(data);
         }
       } catch (err) {
+        setisLoading(true);
         return Promise.reject(err);
       }
     };
@@ -84,38 +89,42 @@ const ShopDetailScreen: React.FC<IShopDetailScreen> = ({
         position="bottom"
         style={{ alignItems: 'center' }}
       />
-      <FlatList
-        ListHeaderComponent={
-          <>
-            <Image
-              style={{ width: '100%', height: 150 }}
-              source={{ uri: shop?.photoUrl }}
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#1EB3F2" />
+      ) : (
+        <FlatList
+          ListHeaderComponent={
+            <>
+              <Image
+                style={{ width: '100%', height: 150 }}
+                source={{ uri: shop?.photoUrl }}
+              />
+              <ShopDetail shop={shop} />
+            </>
+          }
+          data={shop?.iceCreams}
+          renderItem={({ item }) => (
+            <Rating
+              name={item.name}
+              votes={item.votes}
+              positiveVotes={item.positiveVotes}
+              id={item.id}
+              setIsUpdate={setIsUpdate}
+              isUpdate={isUpdate}
+              voted={item.voted}
             />
-            <ShopDetail shop={shop} />
-          </>
-        }
-        data={shop?.iceCreams}
-        renderItem={({ item }) => (
-          <Rating
-            name={item.name}
-            votes={item.votes}
-            positiveVotes={item.positiveVotes}
-            id={item.id}
-            setIsUpdate={setIsUpdate}
-            isUpdate={isUpdate}
-            voted={item.voted}
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        ListFooterComponent={
-          <Icon
-            style={{ alignSelf: 'center' }}
-            name="ice-cream"
-            size={160}
-            color="#B2B2B2"
-          />
-        }
-      />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          ListFooterComponent={
+            <Icon
+              style={{ alignSelf: 'center' }}
+              name="ice-cream"
+              size={160}
+              color="#B2B2B2"
+            />
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
