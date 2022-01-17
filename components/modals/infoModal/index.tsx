@@ -12,6 +12,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import { IShop } from '../../../screens/ShopDetailScreen';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { API_URL_SHOP } from '../../../utils/api';
 
 interface InfoModal {
   infoModalVisible: boolean;
@@ -32,9 +33,7 @@ const InfoModal: React.FC<InfoModal> = ({
     if (id) {
       const getShop = async () => {
         try {
-          const resp = await axios.get(
-            `http://10.0.2.2:8080/api/v1/shops/${id}`,
-          );
+          const resp = await axios.get(`${API_URL_SHOP}${id}`);
           const data = resp.data;
           if (data) {
             setShop(data);

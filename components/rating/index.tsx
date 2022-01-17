@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../contexts/ThemeContext';
 import axios, { AxiosError } from 'axios';
 import { showMessage } from 'react-native-flash-message';
+import { API_URL_VOTE } from '../../utils/api';
 
 interface IRating {
   name: string;
@@ -32,12 +33,9 @@ const Rating: React.FC<IRating> = ({
   const handleVote = async (isPositive: boolean) => {
     try {
       setIsLoading(true);
-      const resp = await axios.post(
-        `http://10.0.2.2:8080/api/v1/ice-cream/${id}/vote`,
-        {
-          positive: isPositive,
-        },
-      );
+      const resp = await axios.post(`${API_URL_VOTE}${id}/vote`, {
+        positive: isPositive,
+      });
       if (resp.status === 204) {
         setIsLoading(false);
         setIsUpdate(!isUpdate);

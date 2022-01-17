@@ -16,6 +16,7 @@ import { SearchBarBaseProps } from 'react-native-elements/dist/searchbar/SearchB
 import { useTheme } from '../contexts/ThemeContext';
 import axios from 'axios';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { API_URL_SHOPS } from '../utils/api';
 
 const SafeSearchBar = SearchBar as unknown as React.FC<SearchBarBaseProps>;
 
@@ -48,7 +49,7 @@ const HomeScreen: React.FC<IHomeScreen> = ({ navigation }) => {
 
   const getShops = async () => {
     try {
-      const resp = await axios.get('http://10.0.2.2:8080/api/v1/shops');
+      const resp = await axios.get(`${API_URL_SHOPS}`);
       const data = resp.data;
       if (data) {
         setShops(data);
